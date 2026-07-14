@@ -50,6 +50,8 @@ flowchart TB
     G --> H["Power Automate and Teams alerts"]
 ```
 
+See the [detailed system architecture](docs/architecture_en.md) for the validation workflow, log model, and phase-out design.
+
 ## My Contributions
 
 - Defined monitoring scope, expected update windows, and quality rules.
