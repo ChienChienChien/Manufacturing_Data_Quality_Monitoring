@@ -1,87 +1,87 @@
-**繁體中文** | [English](README_EN.md)
+**English** | [繁體中文](README_ZH-TW.md)
 
-# 製造資料品質監控平台
+# Manufacturing Data Quality Monitoring Platform
 
-將資料品質納入 BOM 日常營運管理，建立可量化、可追蹤的監控與通報機制，降低資料異常對運算結果及後續決策的影響。平台每日檢查 **8 張關鍵資料表**，透過 Power BI 呈現品質狀態，並由 Power Automate 將異常推送至 Teams；上線後曾成功發現空表並協助排除，後續也配合資料直接串接 MES 的架構調整逐步退場。
+Embedded data quality into daily bill of materials (BOM) operations through measurable, traceable monitoring and notification controls, reducing the impact of data exceptions on calculation results and downstream decisions. The platform checks **8 critical data tables** each day, presents quality status in Power BI, and sends exceptions to Teams through Power Automate. It detected an empty source table after go-live and is being phased out as BOM data access moves directly to MES.
 
-## 專案概況
+## Project Overview
 
-| 項目 | 說明 |
+| Item | Description |
 |---|---|
-| 業務範圍 | 製造資料品質、BOM 穩定性 |
-| 個人職責 | 規則設計、程式開發、儀表板、通知流程 |
-| 監控範圍 | 8 張 BOM 關鍵資料表，每日檢查 |
-| 上線時間 | 2025 年 7 月 |
-| 目前狀態 | 資料改接 MES 後逐步下線 |
+| Business domain | Manufacturing data quality and BOM reliability |
+| My role | Rule design, application development, dashboard, notification workflow |
+| Monitoring scope | 8 critical BOM data tables, checked daily |
+| Go-live | July 2025 |
+| Current status | Being phased out as BOM data access moves directly to MES |
 
-## 問題
+## Business Challenge
 
-BOM 原先從資料倉儲讀取製造資料；資料由資訊單位自 MES 轉檔。轉檔偶有空表、欄位異常或更新延遲，通常要等 BOM 結果不合理後才發現，再逐張排查來源表，處理時間較長。
+BOM calculations previously read manufacturing data from a data warehouse populated through MES file transfers. Empty tables, schema changes, or delayed updates were often discovered only after BOM results appeared abnormal, making source-table diagnosis time-consuming.
 
-## 作法
+## Approach
 
-1. 盤點 BOM 使用的 8 張關鍵資料表及預期更新時間。
-2. 設定空表、必要欄位、空值及資料新鮮度規則。
-3. 每日執行檢查，保存資料表及規則明細。
-4. 以 Power BI 顯示狀態與歷史紀錄。
-5. 異常時由 Power Automate 推送至 Teams，通知運籌、煉鋼及相關單位。
+1. Identified the 8 critical BOM input tables and their expected update windows.
+2. Defined rules for empty tables, required fields, null values, and data freshness.
+3. Ran checks daily and stored both table-level summaries and rule-level details.
+4. Presented current status and history in Power BI.
+5. Sent exceptions through Power Automate to Teams for logistics, steelmaking, and related teams.
 
-## 檢查規則
+## Data Quality Rules
 
-| 項目 | 檢查內容 |
+| Dimension | Check |
 |---|---|
-| 完整性 | 資料表筆數大於零 |
-| 結構 | 必要欄位存在 |
-| 欄位品質 | 指定欄位不得為空 |
-| 新鮮度 | 最新資料落在預期期間 |
+| Completeness | Table row count is greater than zero |
+| Schema | Required fields exist |
+| Field quality | Specified fields are not null |
+| Freshness | Latest data falls within the expected time window |
 
-資料來源、排程、資料表與規則均以設定檔管理，便於調整監控範圍。
+Data sources, schedules, tables, and rule assignments are configuration-driven, allowing the monitoring scope to be adjusted without hard-coding each case.
 
-## 系統架構
+## Architecture
 
 ```mermaid
 flowchart TB
-    A["MES 製造資料"] --> B["資料轉檔"]
-    B --> C["資料倉儲"]
-    C --> D["BOM 運算"]
-    C --> E["資料品質檢查"]
-    E --> F["摘要與明細紀錄"]
+    A["MES manufacturing data"] --> B["Data transfer"]
+    B --> C["Data warehouse"]
+    C --> D["BOM calculation"]
+    C --> E["Data quality checks"]
+    E --> F["Summary and detail logs"]
     F --> G["Power BI"]
-    G --> H["Power Automate／Teams 通知"]
+    G --> H["Power Automate and Teams alerts"]
 ```
 
-詳細資料流及退場規劃請見 [系統架構](docs/architecture.md)。
+See the [detailed system architecture](docs/architecture_en.md) for the validation workflow, log model, and phase-out design.
 
-## 個人貢獻
+## My Contributions
 
-- 定義監控範圍、更新時點及品質規則。
-- 開發自動檢查程式與設定檔管理方式。
-- 建立摘要及明細紀錄，保留批次、時間與異常內容。
-- 建置 Power BI 儀表板及 Teams 通知流程。
-- 協助資訊與業務單位定位並排除異常。
+- Defined monitoring scope, expected update windows, and quality rules.
+- Developed the automated validation process and configuration structure.
+- Built summary and detail logs covering batch, timestamp, rule, and exception evidence.
+- Developed the Power BI dashboard and Teams notification workflow.
+- Supported IT and business teams in locating and resolving exceptions.
 
-資料轉檔由資訊單位負責；本專案提供獨立監控及異常證據。
+The underlying data-transfer process was owned by IT. This project provided an independent monitoring and evidence layer.
 
-## 實際案例
+## Incident Example
 
-系統曾在 BOM 運算前發現關鍵資料表全空，隨即透過 Teams 通知相關單位。明確的資料表、檢查規則與時間紀錄，協助團隊快速確認轉檔問題並完成排除。
+The platform detected a critical BOM input table with no records before calculation. The alert identified the table, failed rule, and check time, allowing the responsible teams to confirm and resolve the transfer issue through Teams.
 
-## 成果
+## Key Outcomes
 
-- 將異常發現時點由 BOM 運算後提前至資料輸入前。
-- 每日監控 **8 張關鍵資料表**的完整性及更新狀態。
-- 建立 Power BI 監控及 Teams 主動通知流程。
-- 留存規則明細，縮短異常定位時間。
-- 曾於運算前發現空表並協助排除。
+- Moved exception detection upstream, before BOM calculation.
+- Monitors **8 critical data tables** for completeness and freshness each day.
+- Established Power BI monitoring and proactive Teams notification.
+- Preserved rule-level evidence to shorten diagnosis time.
+- Detected and supported resolution of an empty-table incident.
 
-## 退場規劃
+## Phase-Out Plan
 
-本平台用於控管 MES 至資料倉儲的轉檔風險。BOM 改為直接讀取 MES 後，中間轉檔風險隨之降低，因此僅保留仍有需要的監控項目，並逐步停止其餘功能。
+The platform was designed to control transfer risk between MES and the data warehouse. As BOM data access moves directly to MES, that intermediate risk is reduced. Monitoring will remain only where needed, while the remaining functions are retired in stages.
 
-## 使用技術
+## Technology
 
-Python、Great Expectations、YAML、SQL、關聯式資料庫、Power BI、Power Automate、Teams。
+Python, Great Expectations, YAML, SQL, relational databases, Power BI, Power Automate, and Teams.
 
-## 保密說明
+## Confidentiality
 
-本案例僅呈現去識別化的問題、品質規則與系統架構，不含公司原始資料、帳密、內部網址、實際資料表名稱、連線資訊及完整程式碼。
+This case study presents de-identified data quality rules and system architecture only. It excludes proprietary data, credentials, internal URLs, actual table names, connection details, and complete source code.
