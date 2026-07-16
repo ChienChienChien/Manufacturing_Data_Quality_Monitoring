@@ -1,4 +1,4 @@
-[繁體中文](README.md) | **English**
+**English** | [繁體中文](README_ZH-TW.md)
 
 # Manufacturing Data Quality Monitoring Platform
 
