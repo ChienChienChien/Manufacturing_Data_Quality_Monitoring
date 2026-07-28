@@ -2,7 +2,7 @@
 
 # 製造資料品質監控平台
 
-為最低成本 BOM 與原料庫存推估建立資料進入決策流程前的品質門檻。透過每日自動檢核、集中監控與異常通知，讓資料過期、缺漏或結構異常能在影響下游分析前被發現，提升製造決策所依賴資料的可信度。
+為 [最低成本 BOM 資料與決策平台](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README_ZH-TW.md) 與 [原料庫存推估與庫存告警系統](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README_ZH-TW.md) 建立資料進入決策流程前的品質門檻。透過每日自動檢核、集中監控與異常通知，讓資料過期、缺漏或結構異常能在影響下游分析前被發現，提升決策所依賴資料的可信度。
 
 ## 目的
 
