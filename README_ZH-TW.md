@@ -1,12 +1,19 @@
 [English](README.md) | **繁體中文**
 
-# 製造資料品質監控平台
+# 資料品質監控平台
 
-為 [最低成本 BOM 資料與決策平台](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README_ZH-TW.md) 與 [原料庫存推估與庫存告警系統](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README_ZH-TW.md) 建立資料進入決策流程前的品質門檻。透過每日自動檢核、集中監控與異常通知，讓資料過期、缺漏或結構異常能在影響下游分析前被發現，提升決策所依賴資料的可信度。
+為 [最低成本 BOM 資料與決策平台](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README_ZH-TW.md) 與 [原料庫存推估與庫存告警系統](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README_ZH-TW.md) 建立資料進入決策流程前的品質門檻。透過每日自動檢核、集中監控與異常通知，讓資料過期、缺漏或結構異常能在影響下游分析前被發現，提升用以決策的資料可信度。
 
 ## 目的
 
-最低成本 BOM 與原料庫存推估所使用的製造資料，部分由大型作業系統每日轉檔至資料倉儲。來源系統負載、資料倉儲效能、資料庫鎖定或轉檔流程異常，都可能造成資料延遲、缺漏或不完整。
+在資料進入決策流程前建立基本可信門檻，主動辨識資料的時效性與完整性，降低下游系統使用不可靠資料的風險，並於風險發生時能夠快速掌握問題摒除錯。
+
+資料倉儲（Data Warehouse）會每天接收來自大型系統（例如MES, SAP）的資料，然而資料傳輸的過程中，容易發生以下問題導致資料延遲、缺漏或不完整：
+
+- 來源系統與資料倉儲的效能問題
+- 資料倉儲遭使用者鎖定
+- 來源系統的資料表規格修改
+- 轉檔程式異常
 
 這類問題不一定會使程式執行失敗；有時流程看似正常，直到使用者發現報表結果與實務認知不符後才開始追查。若異常未及時發現，可能使 BOM 計算產生偏差，或讓原料庫存推估未能正確顯示缺料風險，進而錯失追料或調整生產計畫的時機。
 
