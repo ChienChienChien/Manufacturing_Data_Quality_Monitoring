@@ -2,7 +2,7 @@
 
 # Data Quality Monitoring Platform
 
-This project establishes an automated data quality monitoring and alerting mechanism that checks data freshness, completeness, and schema integrity before data from the data warehouse reaches downstream reports, analytical models, and decision-making workflows.
+This project implements an automated data quality monitoring and alerting framework that validates data freshness, completeness, and schema integrity before data flows from the data warehouse into downstream reports, analytical models, and decision-making workflows.
 
 In this implementation, the platform monitors data warehouse inputs used by the [Lowest-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md) and the [Material Inventory Forecasting and Alert System](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README.md), reducing the risk of stale or incomplete data affecting operational decisions.
 
@@ -27,11 +27,11 @@ This project uses daily automated validation, centralized monitoring, and anomal
 |---|---|---|
 | Freshness | Whether each table completes its daily update by the expected time | Prevent downstream systems from using stale data |
 | Completeness | Whether a table is empty | Detect missing data or incomplete transfers |
-| Basic schema | Whether required columns are present | Early detection of workflow risks caused by source-schema Changes |
+| Schema integrity | Whether required columns are present | Detect workflow risks caused by changes to the source schema |
 
 ### 2. Automate Daily Data Validation
 
-The validation program is deployed on a Windows Server and automatically triggered by Windows Task Scheduler at 8:00 a.m. each day. Python uses Great Expectations to perform data-quality checks, writing both overall results and rule-level details to SQL Server for Power BI to refresh the monitoring dashboard.
+The validation program is deployed on a Windows Server and automatically triggered by Windows Task Scheduler at 8:00 a.m. each day. Python uses Great Expectations to perform data quality checks, writing both overall results and rule-level details to SQL Server for Power BI to refresh the monitoring dashboard.
 
 Through automated validation and centralized reporting, data quality management no longer depends on manual table-by-table checks. Maintainers can use historical records to quickly identify the affected table, incident time, and failed rules, shortening the time required to confirm and locate issues.
 
