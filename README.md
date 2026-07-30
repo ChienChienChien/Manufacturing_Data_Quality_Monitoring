@@ -2,7 +2,7 @@
 
 # Data Quality Monitoring Platform
 
-This project establishes an automated data quality monitoring and alerting mechanism that checks data freshness, completeness, and schema integrity before data reaches downstream reports, analytical models, and decision-making workflows.
+This project establishes an automated data quality monitoring and alerting mechanism that checks data freshness, completeness, and schema integrity before data from the data warehouse reaches downstream reports, analytical models, and decision-making workflows.
 
 In this implementation, the platform monitors data warehouse inputs used by the [Lowest-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md) and the [Material Inventory Forecasting and Alert System](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README.md), reducing the risk of stale or incomplete data affecting operational decisions.
 
