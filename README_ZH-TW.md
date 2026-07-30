@@ -1,7 +1,12 @@
 [English](README.md) | **繁體中文**
 
 # 資料品質監控平台
-資料倉儲（Data Warehouse）提供 [最低成本 BOM 資料與決策平台](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README_ZH-TW.md) 與 [原料庫存推估與庫存告警系統](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README_ZH-TW.md) 所需的資料，在資料進入決策流程前，建立可靠的資料品質門檻。
+
+本專案建立一套自動化資料品質監控與異常告警機制，針對資料倉儲（Data Warehouse）之資料進入報表、分析模型與決策流程前的時效性、完整性及基本結構進行檢核。
+
+透過每日自動執行、集中監控與即時通知，將過去依賴使用者回報的被動排查模式，轉為主動發現與快速定位，降低異常資料持續影響下游分析與決策的風險。
+
+本案例實際應用於製造資料，支援 [最低成本 BOM 資料與決策平台](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README_ZH-TW.md) 與 [原料庫存推估與庫存告警系統](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README_ZH-TW.md)；檢核架構亦可依不同資料表與使用情境設定規則，延伸至其他資料來源及分析流程。
 
 ## 目的
 
