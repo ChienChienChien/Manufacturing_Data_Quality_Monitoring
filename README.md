@@ -2,22 +2,26 @@
 
 # Data Quality Monitoring Platform
 
-The Data Warehouse supplies the data required by both the [Lowest-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md) and the [Material Inventory Forecasting and Alert System](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README.md), establishing reliable data-quality before the data enters decision-making processes.
+This project establishes an automated data quality monitoring and alerting mechanism that checks data freshness, completeness, and schema integrity before data reaches downstream reports, analytical models, and decision-making workflows.
+
+In this implementation, the platform monitors data warehouse inputs used by the [Lowest-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md) and the [Material Inventory Forecasting and Alert System](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README.md), reducing the risk of stale or incomplete data affecting operational decisions.
+
+The rule-based approach can also be extended to other data sources and analytical workflows.
 
 ## Purpose
 
-The Data Warehouse receives data from enterprise systems such as MES and SAP. During data transfer, the following issues may cause delays, missing data, or incomplete records:
+The data warehouse receives data from enterprise systems such as MES and SAP. During data transfer, the following issues may cause delays, missing data, or incomplete records:
 
 - Performance issues in enterprise systems or the data warehouse
 - Database locks or poor query performance
 - Changes to source table schemas
 - Data transfer process failures
 
-This project takes a monitoring-focused approach, using daily automated checks, centralized monitoring, and exception notifications to identify data issues before they affect downstream analytics and decision-making, improving the reliability of decision data.
+This project uses daily automated validation, centralized monitoring, and anomaly alerts to identify data issues before they affect downstream analytics and decision-making, improving confidence in the data used for operational decisions.
 
 ## Outcomes and Approach
 
-### 1. Define Data Expectations
+### 1. Establish a Baseline for Data Reliability
 
 | Validation Dimension | Validation Rule | Management Objective |
 |---|---|---|
@@ -25,17 +29,17 @@ This project takes a monitoring-focused approach, using daily automated checks, 
 | Completeness | Whether a table is empty | Detect missing data or incomplete transfers |
 | Basic schema | Whether required columns are present | Early detection of workflow risks caused by source-schema Changes |
 
-### 2. Data Validation Automation
+### 2. Automate Daily Data Validation
 
 The validation program is deployed on a Windows Server and automatically triggered by Windows Task Scheduler at 8:00 a.m. each day. Python uses Great Expectations to perform data-quality checks, writing both overall results and rule-level details to SQL Server for Power BI to refresh the monitoring dashboard.
 
 Through automated validation and centralized reporting, data quality management no longer depends on manual table-by-table checks. Maintainers can use historical records to quickly identify the affected table, incident time, and failed rules, shortening the time required to confirm and locate issues.
 
-### 3. From User-Reported Issues to Proactive Exception Notifications
+### 3. Shift from User-Reported Issues to Proactive Alerts
 
-When SQL Server records a new validation result with a Warning status, Power Automate automatically posts an alert to Teams, enabling report users and maintainers to identify the issue early.
+When a new validation record is added to SQL Server, Power Automate checks its status and posts an alert to Teams if the result is `Warning`, allowing report users and maintainers to respond earlier.
 
-After receiving an exception notification, Maintainers can review the validation details in the Power BI Data Exception Monitoring table (shown below), confirm the issue, and then contact IT or the relevant system owners for resolution.
+After receiving an alert, maintainers can review the validation details in the Power BI data quality monitoring view (shown below), identify the affected table and failed rule, and contact IT or the relevant system owner for further investigation.
 
 <table>
   <tr>
@@ -45,7 +49,7 @@ After receiving an exception notification, Maintainers can review the validation
   </tr>
 </table>
 
-> Warning example: The upper section shows anomaly history, while the lower section retains the rule results and details for an individual validation run, helping maintainers quickly identify the source of the issue.
+> Warning example: The upper section shows anomaly history, while the lower section provides rule-level results for a single validation run, helping maintainers quickly identify the affected table and failed rule.
 
 ## Architecture
 
