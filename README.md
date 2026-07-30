@@ -1,87 +1,74 @@
 **English** | [繁體中文](README_ZH-TW.md)
 
-# Manufacturing Data Quality Monitoring Platform
+# Data Quality Monitoring Platform
 
-Embedded data quality into daily bill of materials (BOM) operations through measurable, traceable monitoring and notification controls, reducing the impact of data exceptions on calculation results and downstream decisions. The platform checks **8 critical data tables** each day, presents quality status in Power BI, and sends exceptions to Teams through Power Automate. It detected an empty source table after go-live and is being phased out as BOM data access moves directly to MES.
+The data warehouse provides the data required by the [Least-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md) and the [Material Inventory Forecasting and Alert System](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README.md). This project establishes a reliable data quality gate before the data enters downstream decision-making workflows.
 
-## Project Overview
+## Purpose
 
-| Item | Description |
-|---|---|
-| Business domain | Manufacturing data quality and BOM reliability |
-| My role | Rule design, application development, dashboard, notification workflow |
-| Monitoring scope | 8 critical BOM data tables, checked daily |
-| Go-live | July 2025 |
-| Current status | Being phased out as BOM data access moves directly to MES |
+The data warehouse receives data from large-scale enterprise systems, such as MES and SAP, on a daily basis. During data transfer, the following issues may cause delays, missing data, or incomplete records:
 
-## Business Challenge
+- Performance issues in source systems or the data warehouse
+- Database locks or poor query performance
+- Changes to source table schemas
+- Data transfer failures
 
-BOM calculations previously read manufacturing data from a data warehouse populated through MES file transfers. Empty tables, schema changes, or delayed updates were often discovered only after BOM results appeared abnormal, making source-table diagnosis time-consuming.
+From a monitoring perspective, this project combines automated daily validation, centralized monitoring, and anomaly notifications so that stale, missing, or structurally inconsistent data can be detected before it affects downstream analytics, improving the trustworthiness of decision-making data.
 
-## Approach
+## Outcomes and Approach
 
-1. Identified the 8 critical BOM input tables and their expected update windows.
-2. Defined rules for empty tables, required fields, null values, and data freshness.
-3. Ran checks daily and stored both table-level summaries and rule-level details.
-4. Presented current status and history in Power BI.
-5. Sent exceptions through Power Automate to Teams for logistics, steelmaking, and related teams.
+### 1. Established a Quality Gate for Decision-Critical Data
 
-## Data Quality Rules
+For critical data used by the least-cost BOM process and material inventory forecasting, the platform applies three categories of validation rules—freshness, completeness, and basic schema—to confirm that the data meets baseline usability requirements before entering decision-making workflows.
 
-| Dimension | Check |
-|---|---|
-| Completeness | Table row count is greater than zero |
-| Schema | Required fields exist |
-| Field quality | Specified fields are not null |
-| Freshness | Latest data falls within the expected time window |
+| Validation Dimension | Validation Rule | Management Objective |
+|---|---|---|
+| Freshness | Whether each table completes its daily update by the expected time | Prevent downstream systems from using stale data |
+| Completeness | Whether a table is empty or contains null values in the data transfer date | Detect missing data or incomplete transfers |
+| Basic schema | Whether required columns are present | Identify risks caused by source schema changes before they disrupt downstream processes |
 
-Data sources, schedules, tables, and rule assignments are configuration-driven, allowing the monitoring scope to be adjusted without hard-coding each case.
+The mechanism focuses on data freshness, completeness, and basic schema as the first quality check before downstream models run, reducing the risk that anomalous data affects least-cost BOM calculations, inventory forecasts, and material shortage assessments.
+
+### 2. Turned Data Validation into a Daily Automated Workflow
+
+The validation program is deployed on Windows Server and triggered automatically by Windows Task Scheduler every day at 8:00 a.m. Python uses Great Expectations to execute data quality checks, writes the overall results and rule-level details to SQL Server, and makes them available for Power BI monitoring updates.
+
+Through automated validation and centralized reporting, data quality management no longer depends on manual table-by-table checks. Maintainers can use historical records to quickly identify the affected table, incident time, and failed rules, shortening the time required to confirm and locate issues.
+
+### 3. Shifted from User-Reported Issues to Proactive Anomaly Notifications
+
+When a new validation result with a `Warning` status is added to SQL Server, Power Automate automatically posts the anomaly to Teams so that report users and maintainers can respond earlier.
+
+Maintainers can use the affected table and failed rules to determine the likely source, then coordinate with IT or the responsible system owner. Compared with waiting for users to notice unexpected report results before starting an investigation, this workflow shifts data quality management from reactive reporting to proactive detection and reduces the risk of anomalous data continuing to affect downstream analytics and decisions.
+
+<table>
+  <tr>
+    <td align="center" width="100%">
+      <img src="docs/images/data-quality-warning.png" alt="Data quality warning history and validation details" width="900"><br>
+    </td>
+  </tr>
+</table>
+
+> Warning example: The upper section shows anomaly history, while the lower section retains the rule results and details for an individual validation run, helping maintainers quickly identify the source of the issue.
 
 ## Architecture
 
 ```mermaid
 flowchart TB
-    A["MES manufacturing data"] --> B["Data transfer"]
-    B --> C["Data warehouse"]
-    C --> D["BOM calculation"]
-    C --> E["Data quality checks"]
-    E --> F["Summary and detail logs"]
-    F --> G["Power BI"]
-    G --> H["Power Automate and Teams alerts"]
+    A["Data Warehouse<br/>Critical Manufacturing Data"] --> C["Python/Great Expectations<br/>Data Quality Validation"]
+    C --> D["SQL Server<br/>Validation Summary and Rule Details"]
+    D --> E["Power BI<br/>Monitoring and Historical Tracking"]
+    D --> F["Power Automate<br/>Monitor New Records"]
+    F --> G{"Status = Warning?"}
+    G -->|Yes| H["Teams<br/>Anomaly Notification"]
 ```
-
-See the [detailed system architecture](docs/architecture_en.md) for the validation workflow, log model, and phase-out design.
-
-## My Contributions
-
-- Defined monitoring scope, expected update windows, and quality rules.
-- Developed the automated validation process and configuration structure.
-- Built summary and detail logs covering batch, timestamp, rule, and exception evidence.
-- Developed the Power BI dashboard and Teams notification workflow.
-- Supported IT and business teams in locating and resolving exceptions.
-
-The underlying data-transfer process was owned by IT. This project provided an independent monitoring and evidence layer.
-
-## Incident Example
-
-The platform detected a critical BOM input table with no records before calculation. The alert identified the table, failed rule, and check time, allowing the responsible teams to confirm and resolve the transfer issue through Teams.
-
-## Key Outcomes
-
-- Moved exception detection upstream, before BOM calculation.
-- Monitors **8 critical data tables** for completeness and freshness each day.
-- Established Power BI monitoring and proactive Teams notification.
-- Preserved rule-level evidence to shorten diagnosis time.
-- Detected and supported resolution of an empty-table incident.
-
-## Phase-Out Plan
-
-The platform was designed to control transfer risk between MES and the data warehouse. As BOM data access moves directly to MES, that intermediate risk is reduced. Monitoring will remain only where needed, while the remaining functions are retired in stages.
 
 ## Technology
 
-Python, Great Expectations, YAML, SQL, relational databases, Power BI, Power Automate, and Teams.
-
-## Confidentiality
-
-This case study presents de-identified data quality rules and system architecture only. It excludes proprietary data, credentials, internal URLs, actual table names, connection details, and complete source code.
+| Category | Technology | Purpose |
+|---|---|---|
+| Validation | Python, Great Expectations | Execute freshness, completeness, and basic schema rules |
+| Data storage | SQL Server | Store validation summaries, rule-level details, and historical records |
+| Visualization | Power BI | Centralize anomaly statuses and validation results |
+| Workflow and notifications | Power Automate, Microsoft Teams | Trigger and publish anomaly notifications based on `Warning` records |
+| Runtime environment | Windows Server, Windows Task Scheduler | Run the validation workflow automatically each day |
