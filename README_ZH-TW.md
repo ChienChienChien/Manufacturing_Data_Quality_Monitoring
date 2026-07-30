@@ -54,7 +54,7 @@
 
 ```mermaid
 flowchart TB
-    A["資料倉儲<br/>關鍵製造資料"] --> C["Python / Great Expectations<br/>資料品質檢核"]
+    A["資料倉儲<br/>關鍵製造資料"] --> C["Python/Great Expectations<br/>資料品質檢核"]
     C --> D["SQL Server<br/>檢核摘要與規則明細"]
     D --> E["Power BI<br/>監控與歷史追蹤"]
     D --> F["Power Automate<br/>監聽新增紀錄"]
