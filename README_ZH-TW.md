@@ -1,12 +1,9 @@
 [English](README.md) | **繁體中文**
 
 # 資料品質監控平台
-
-為 [最低成本 BOM 資料與決策平台](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README_ZH-TW.md) 與 [原料庫存推估與庫存告警系統](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README_ZH-TW.md) 建立資料進入決策流程前的品質門檻。透過每日自動檢核、集中監控與異常通知，讓資料過期、缺漏或結構異常能在影響下游分析前被發現，提升用以決策的資料可信度。
+資料倉儲（Data Warehouse）提供 [最低成本 BOM 資料與決策平台](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README_ZH-TW.md) 與 [原料庫存推估與庫存告警系統](https://github.com/ChienChienChien/Material_Forecasting_System/blob/master/README_ZH-TW.md) 所需的資料，在資料進入決策流程前，建立可靠的資料品質門檻。
 
 ## 目的
-
-在資料進入決策流程前建立基本可信門檻，主動辨識資料的時效性與完整性，降低下游系統使用不可靠資料的風險，並於風險發生時能夠快速掌握問題摒除錯。
 
 資料倉儲（Data Warehouse）會每天接收來自大型系統（例如MES, SAP）的資料，然而資料傳輸的過程中，容易發生以下問題導致資料延遲、缺漏或不完整：
 
@@ -15,9 +12,7 @@
 - 來源系統的資料表規格修改
 - 轉檔程式異常
 
-這類問題不一定會使程式執行失敗；有時流程看似正常，直到使用者發現報表結果與實務認知不符後才開始追查。若異常未及時發現，可能使 BOM 計算產生偏差，或讓原料庫存推估未能正確顯示缺料風險，進而錯失追料或調整生產計畫的時機。
-
-本專案的目的，是在資料進入決策流程前建立基本可信門檻，主動辨識資料的時效性、完整性與基本結構異常，降低下游系統使用不可靠資料的風險。
+本專案以監控的角度，透過每日自動檢核、集中監控與異常通知，讓資料過期、缺漏或結構異常能在影響下游分析運用前被發現，提升決策資料的可信度。
 
 ## 成果
 
@@ -33,9 +28,13 @@
 
 Power BI 集中呈現檢核時間、資料表、異常狀態與規則明細，使維護人員能快速確認是哪一項檢核未通過，再依問題來源與 IT 或相關系統負責人協作處理。平台負責提早發現與定位，不直接修改或自動修復來源資料。
 
-<p align="center">
-  <img src="docs/images/data-quality-warning.png" alt="資料品質 Warning 紀錄與檢核明細" width="900">
-</p>
+<table>
+  <tr>
+    <td align="center" width="100%">
+      <img src="docs/images/data-quality-warning.png" alt="資料品質 Warning 紀錄與檢核明細" width="900"><br>
+    </td>
+  </tr>
+</table>
 
 > Warning 範例：上方呈現異常歷史紀錄，下方保留單次檢核的規則結果與明細，協助快速確認異常來源。
 
