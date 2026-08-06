@@ -1,0 +1,70 @@
+datasources:
+  BIDATA:
+    user_env: BIDATA_USER
+    password_env: BIDATA_PASSWORD
+    host_env: BIDATA_HOST
+    dbname_env: BIDATA_NAME
+    driver_env: BIDATA_DRIVER
+
+  QUANTDATA:
+    user_env: QUANTDATA_USER
+    password_env: QUANTDATA_PASSWORD
+    host_env: QUANTDATA_HOST
+    dbname_env: QUANTDATA_NAME
+    driver_env: QUANTDATA_DRIVER
+
+schedule:
+
+  - name: "daily_task"
+    time_range:
+      start: "07:59"
+      end: "08:01"
+    tables:
+      - name: YSMES_YSMLT106R
+        datasource: BIDATA
+        expectation_files: 
+          - expectations/column_資料產生日_expectation.yaml
+          - expectations/table_expectation.yaml
+
+      - name: YSMES_YSMLT509R_EAF
+        datasource: BIDATA
+        expectation_files: 
+          - expectations/column_資料產生日_expectation.yaml
+          - expectations/table_expectation.yaml
+
+      - name: YSMES_YSPRP812R
+        datasource: BIDATA
+        expectation_files: 
+          - expectations/column_資料產生日_expectation.yaml
+          - expectations/table_expectation.yaml
+
+      - name: SAP_ERPTotal
+        datasource: BIDATA
+        expectation_files: 
+          - expectations/column_資料產生日_expectation.yaml
+          - expectations/table_expectation.yaml
+
+      - name: YSMES_VIEW_TP_YSPRP812R1
+        datasource: BIDATA
+        expectation_files: 
+          - expectations/column_ETL資料產生日_expectation.yaml
+          - expectations/table_expectation.yaml
+
+      - name: YSMES_PRP805MST01_PLAN_DATE
+        datasource: BIDATA
+        expectation_files: 
+          - expectations/column_資料產生日_expectation.yaml
+          - expectations/table_expectation.yaml
+
+      - name: WAP_PO_DTL
+        datasource: BIDATA
+        expectation_files: 
+          - expectations/column_ETL資料產生日_expectation.yaml
+          - expectations/table_expectation.yaml
+      
+      - name: YSMES_YSPRP509F
+        datasource: BIDATA
+        expectation_files: 
+          - expectations/column_ETL資料產生日_expectation.yaml
+          - expectations/table_expectation.yaml
+
