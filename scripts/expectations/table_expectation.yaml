@@ -1,0 +1,9 @@
+# 檢核資料表不為空
+expectation_suite_name: table_expectation
+expectations:
+  - expectation_type: expect_table_row_count_to_be_between
+    kwargs:
+      min_value : 1
+
+meta:
+  great_expectations_version: "0.15.10"

@@ -1,0 +1,22 @@
+# 檢核[ETL資料產生日]
+# 1. 該欄位是否存在
+# 2. 該欄位值是否為Null
+# 3. 該欄位值是否包含當日(當日是否有轉檔成功)
+expectation_suite_name: date_expectation
+expectations:
+  - expectation_type: expect_column_to_exist
+    kwargs:
+      column: ETL資料產生日
+
+  - expectation_type: expect_column_values_to_not_be_null
+    kwargs:
+      column: ETL資料產生日
+
+  - expectation_type: expect_column_max_to_be_between
+    kwargs:
+      column: ETL資料產生日
+      min_value: "min_date"
+      max_value: "max_date"
+
+meta:
+  great_expectations_version: "0.15.50"
